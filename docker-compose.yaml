@@ -1,0 +1,25 @@
+version: "3"
+services:
+  server:
+    #build: .
+    image: node:14-alpine
+    ports:
+      - 3000:3000
+    container_name: jr-cm-14_server
+    depends_on:
+      - mongo
+    tty: true
+    # env_file: .env
+    volumes:
+      - ./:/app
+    environment:
+      - JWT_KEY=secret
+      - CONNECTION_STRING=mongodb://mongo/jr-cms-db
+    command: >
+      sh -c " cd /app && rm -rf node_modules/ && npm i && npm run dev"
+
+  mongo:
+    image: mongo:4
+    ports:
+      - 27017:27017
+    container_name: jr-cm-14_mongo
